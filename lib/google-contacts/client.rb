@@ -200,21 +200,6 @@ module GContacts
       List.new(Nori.parse(results, :nokogiri))
     end
 
-    private
-    def build_query_string(params)
-      return nil unless params
-
-      query_string = ""
-
-      params.each do |k, v|
-        next unless v
-        query_string << "&" unless query_string == ""
-        query_string << "#{k}=#{CGI::escape(v.to_s)}"
-      end
-
-      query_string == "" ? nil : query_string
-    end
-
     def http_request(method, uri, args)
       headers = args[:headers] || {}
       headers["Authorization"] = "Bearer #{@options[:access_token]}"
@@ -261,5 +246,21 @@ module GContacts
 
       response.body
     end
+
+    private
+    def build_query_string(params)
+      return nil unless params
+
+      query_string = ""
+
+      params.each do |k, v|
+        next unless v
+        query_string << "&" unless query_string == ""
+        query_string << "#{k}=#{CGI::escape(v.to_s)}"
+      end
+
+      query_string == "" ? nil : query_string
+    end
+
   end
 end
