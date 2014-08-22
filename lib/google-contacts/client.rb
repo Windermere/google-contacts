@@ -144,7 +144,7 @@ module GContacts
 
       xml = "<?xml version='1.0' encoding='UTF-8'?>\n#{element.to_xml}"
 
-      data = Nori.parse(http_request(:put, URI(uri[:get] % [:base, File.basename(element.id)]), :body => xml, :headers => {"Content-Type" => "application/atom+xml", "If-Match" => element.etag}), :nokogiri)
+      data = Nori.parse(http_request(:put, URI(uri[:get] % [(element.type || :base), File.basename(element.id)]), :body => xml, :headers => {"Content-Type" => "application/atom+xml", "If-Match" => element.etag}), :nokogiri)
       unless data["entry"]
         raise InvalidResponse, "Updated but response wasn't a valid element"
       end
@@ -163,7 +163,7 @@ module GContacts
       uri = API_URI["#{element.category}s".to_sym]
       raise InvalidKind, "Unsupported kind #{element.category}" unless uri
 
-      http_request(:delete, URI(uri[:get] % [:base, File.basename(element.id)]), :headers => {"Content-Type" => "application/atom+xml", "If-Match" => element.etag})
+      http_request(:delete, URI(uri[:get] % [(element.type || :base), File.basename(element.id)]), :headers => {"Content-Type" => "application/atom+xml", "If-Match" => element.etag})
 
       true
     end
