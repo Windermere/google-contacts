@@ -1,7 +1,7 @@
 module GContacts
   class Element
     attr_accessor :title, :content, :data, :category, :etag, :group_id
-    attr_reader :id, :edit_uri, :modifier_flag, :updated, :batch
+    attr_reader :id, :edit_uri, :modifier_flag, :updated, :batch, :link
 
     ##
     # Creates a new element by parsing the returned entry from Google
@@ -12,6 +12,7 @@ module GContacts
       return unless entry
 
       @id, @updated, @content, @title, @etag = entry["id"], Time.parse(entry["updated"]), entry["content"], entry["title"], entry["@gd:etag"]
+      @link = entry["link"]
       if entry["category"]
         @category = entry["category"]["@term"].split("#", 2).last
         @category_tag = entry["category"]["@label"] if entry["category"]["@label"]
